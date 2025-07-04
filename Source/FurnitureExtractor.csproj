@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="FurnitureExtractor.cs" />
   </ItemGroup>
 
 </Project>
