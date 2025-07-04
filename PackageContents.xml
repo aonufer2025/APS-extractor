@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageContents xmlns="http://www.autodesk.com/APP">
+  <Components>
+    <ComponentEntry AppName="FurnitureExtractor" ModuleName="./FurnitureExtractor.dll" />
+  </Components>
+</PackageContents>
