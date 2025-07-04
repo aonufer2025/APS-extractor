@@ -1,0 +1,37 @@
+name: Build .NET Plugin
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore ./Source/FurnitureExtractor.csproj
+
+    - name: Build project
+      run: dotnet build ./Source/FurnitureExtractor.csproj --configuration Release
+
+    - name: Zip plugin
+      run: |
+        mkdir output
+        cp ./Source/bin/Release/net6.0/FurnitureExtractor.dll ./output/
+        cp PackageContents.xml ./output/
+        powershell Compress-Archive -Path ./output/* -DestinationPath FurnitureExtractorPlugin.zip
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: FurnitureExtractorPlugin
+        path: FurnitureExtractorPlugin.zip
