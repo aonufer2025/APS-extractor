@@ -1,0 +1,36 @@
+name: Build FurnitureExtractor Plugin
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore NuGet packages
+      run: nuget restore Source/FurnitureExtractor.sln
+
+    - name: Build solution
+      run: msbuild Source/FurnitureExtractor.sln /p:Configuration=Release
+
+    - name: Zip Plugin Output
+      run: |
+        mkdir plugin
+        copy Source/bin/Release/FurnitureExtractor.dll plugin/
+        copy PackageContents.xml plugin/
+        powershell Compress-Archive -Path plugin\* -DestinationPath FurnitureExtractorPlugin.zip
+
+    - name: Upload ZIP artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: FurnitureExtractorPlugin
+        path: FurnitureExtractorPlugin.zip
