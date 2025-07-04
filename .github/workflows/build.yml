@@ -17,11 +17,14 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    - name: List project files
+      run: ls -R
+      
     - name: Restore dependencies
       run: dotnet restore ./Source/FurnitureExtractor.csproj
 
     - name: Build project
-      run: dotnet build ./Source/FurnitureExtractor.csproj --configuration Release
+      run: dotnet build ./Source/FurnitureExtractor.csproj --configuration Release --verbosity normal
 
     - name: Zip plugin
       run: |
@@ -35,3 +38,4 @@ jobs:
       with:
         name: FurnitureExtractorPlugin
         path: FurnitureExtractorPlugin.zip
+        retention-days: 7
